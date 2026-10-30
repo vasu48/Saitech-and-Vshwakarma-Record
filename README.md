@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>SaiTech &amp; Book Store – Khata / Ledger</title>
 <style>
 :root{--ink:#16202e;--mut:#5d6b7d;--bg:#eceff3;--card:#fff;--line:#d9dfe7;--acc:#0e6ba8;--red:#b3261e;--grn:#18794e}
@@ -52,6 +52,57 @@ tfoot td{font-weight:700}
 .pend{font-size:20px;font-weight:700;padding:8px 0}
 .printhead{display:none;align-items:center;gap:12px;border-bottom:2px solid #000;padding-bottom:8px;margin-bottom:10px}
 .empty{color:var(--mut);padding:20px;text-align:center}
+/* ===== Responsive: mobile + desktop ===== */
+html{-webkit-text-size-adjust:100%}
+nav a .sh{display:none}
+nav a .ic{display:none}
+@media screen and (min-width:721px){
+  header{padding:12px 24px}
+  main{padding:24px}
+  nav{margin:0 auto 0 0}
+  tbody tr:hover td{background:rgba(127,127,127,.07)}
+}
+@media screen and (max-width:720px){
+  body{font-size:15px;padding-bottom:calc(68px + env(safe-area-inset-bottom,0px))}
+  header{flex-wrap:nowrap;padding:8px 12px;padding-top:calc(8px + env(safe-area-inset-top,0px));position:sticky;top:0;z-index:20}
+  .brand{min-width:0}.brand b{font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .brand>div{min-width:0}
+  header>button{padding:8px 12px;font-size:14px;flex:none}
+  nav{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--card);border-top:1px solid var(--line);
+      display:grid;grid-template-columns:repeat(5,1fr);gap:0;padding:4px 4px calc(4px + env(safe-area-inset-bottom,0px))}
+  nav a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;font-size:11px;font-weight:600;border-radius:8px;text-align:center}
+  nav a .full{display:none}
+  nav a .sh,nav a .ic{display:block;line-height:1.2}
+  nav a .ic{font-size:20px}
+  main{padding:12px}
+  h2{font-size:19px;margin-bottom:10px}
+  .card{padding:12px;margin-bottom:12px}
+  .grid{grid-template-columns:1fr 1fr}
+  .grid .stat.big{grid-column:1/-1}
+  .stat b{font-size:20px}
+  input,select,textarea{font-size:16px;padding:11px 10px}
+  button,.btn{padding:11px 16px}
+  button.sm,.btn.sm{padding:8px 14px;font-size:14px}
+  .row{grid-template-columns:1fr}
+  .bar>button,.bar>.btn{flex:1;text-align:center}
+  .login{margin:4vh auto}
+  /* table -> cards */
+  .scroll{overflow-x:visible}
+  table.cards,table.cards tbody,table.cards tfoot,table.cards tr,table.cards td{display:block;width:100%}
+  table.cards thead{display:none}
+  table.cards tbody tr{border:1px solid var(--line);border-radius:8px;padding:6px 10px;margin-bottom:10px}
+  table.cards td{display:flex;justify-content:space-between;align-items:center;gap:12px;border:0;padding:5px 0;white-space:normal;text-align:right;overflow-wrap:anywhere}
+  table.cards td[data-l]::before{content:attr(data-l);color:var(--mut);font-size:13px;font-weight:600;text-align:left;flex:none}
+  table.cards td.act{justify-content:flex-end;border-top:1px solid var(--line);margin-top:4px;padding-top:10px}
+  table.cards td:empty{display:none}
+  table.cards tfoot tr{border:2px solid var(--acc);border-radius:8px;padding:8px 10px}
+  table.cards tfoot td{text-align:left;justify-content:flex-start}
+  table.cards tfoot td.n{justify-content:space-between;text-align:right}
+  table.cards tfoot td.n[data-l]::before{content:attr(data-l)}
+  .pend{font-size:18px}
+}
+@media screen and (max-width:360px){.grid{grid-template-columns:1fr}nav a{font-size:10px}}
+@media print{nav,.noprint{display:none!important}body{padding:0}table.cards{display:table}}
 @media print{header,.noprint{display:none!important}body{background:#fff;color:#000}.card{border:0;padding:0}.printhead{display:flex}th,td{white-space:normal}}
 </style>
 </head>
@@ -94,9 +145,9 @@ function route(){
   window.scrollTo(0,0);
 }
 function shell(html,on){
-  const u=me(),L=[['dash','Dashboard / डैशबोर्ड'],['add','+ Add / जोड़ें'],['hist','History / इतिहास'],['rep','Reports / रिपोर्ट'],['prof','Profile / प्रोफ़ाइल']];
+  const u=me(),L=[['dash','Dashboard / डैशबोर्ड','🏠','Home'],['add','+ Add / जोड़ें','➕','Add'],['hist','History / इतिहास','🕘','History'],['rep','Reports / रिपोर्ट','📊','Reports'],['prof','Profile / प्रोफ़ाइल','👤','Profile']];
   A.innerHTML=`<header><div class="brand">${logo(u,44)}<div><b>${esc(u.account_name)}</b><small>खाता / Ledger</small></div></div>
-  <nav>${L.map(l=>`<a href="#${l[0]}" class="${on==l[0]?'on':''}">${l[1]}</a>`).join('')}</nav>
+  <nav>${L.map(l=>`<a href="#${l[0]}" class="${on==l[0]?'on':''}"><span class="ic" aria-hidden="true">${l[2]}</span><span class="sh">${l[3]}</span><span class="full">${l[1]}</span></a>`).join('')}</nav>
   <button class="alt" onclick="logout()">Logout</button></header><main>${html}</main>`;
 }
 
@@ -169,9 +220,9 @@ function drawHist(){
   const q=F.q.toLowerCase();
   const l=mine().filter(t=>(!q||t.product_name.toLowerCase().includes(q))&&(!F.from||t.transaction_date>=F.from)&&(!F.to||t.transaction_date<=F.to)&&(!F.type||t.transaction_type==F.type));
   const s=sum(l);
-  document.getElementById('hl').innerHTML=l.length?`<table><thead><tr><th>Date</th><th>Time</th><th>Type</th><th>Product</th><th class="n">Amount</th><th>Note</th><th></th></tr></thead><tbody>
-  ${l.map(t=>`<tr><td>${t.transaction_date}</td><td>${t.transaction_time}</td><td>${tag(t)}</td><td>${pn(t)}</td><td class="n">${fm(amt(t))}</td><td>${esc(t.note)}</td>
-  <td><a class="btn alt sm" style="padding:4px 10px;font-size:13px" href="#edit-${t.id}">Edit</a> <button class="del sm" onclick="delTx('${t.id}')">Delete</button></td></tr>`).join('')}</tbody>
+  document.getElementById('hl').innerHTML=l.length?`<table class="cards"><thead><tr><th>Date</th><th>Time</th><th>Type</th><th>Product</th><th class="n">Amount</th><th>Note</th><th></th></tr></thead><tbody>
+  ${l.map(t=>`<tr><td data-l="Date">${t.transaction_date}</td><td data-l="Time">${t.transaction_time}</td><td data-l="Type">${tag(t)}</td><td data-l="Product">${pn(t)}</td><td class="n" data-l="Amount">${fm(amt(t))}</td><td data-l="Note">${esc(t.note)}</td>
+  <td class="act"><a class="btn alt sm" style="padding:4px 10px;font-size:13px" href="#edit-${t.id}">Edit</a> <button class="del sm" onclick="delTx('${t.id}')">Delete</button></td></tr>`).join('')}</tbody>
   <tfoot><tr><td colspan="4">${l.length} entries | Udhar Diya ${fm(s.diya)} | Udhar Liya ${fm(s.liya)}</td><td class="n">Net ${fm(s.net)}</td><td colspan="2"></td></tr></tfoot></table>`:'<div class="empty">Koi entry nahi mili / कोई एंट्री नहीं मिली</div>';
 }
 
@@ -199,12 +250,12 @@ function repTable(l){
   const s=sum(l);
   if(R.kind=='product'){
     const g={};l.forEach(t=>{const k=t.product_name.trim().toLowerCase();(g[k]=g[k]||{n:t.product_name||'(No product)',l:[]}).l.push(t)});
-    return `<table><thead><tr><th>Product</th><th class="n">Entries</th><th class="n">Udhar Diya</th><th class="n">Udhar Liya</th><th class="n">Net</th></tr></thead><tbody>
-    ${Object.values(g).sort((a,b)=>a.n.localeCompare(b.n)).map(x=>{const y=sum(x.l);return `<tr><td>${esc(x.n)}</td><td class="n">${x.l.length}</td><td class="n">${fm(y.diya)}</td><td class="n">${fm(y.liya)}</td><td class="n">${fm(y.net)}</td></tr>`}).join('')}</tbody>
-    <tfoot><tr><td>All</td><td class="n">${l.length}</td><td class="n">${fm(s.diya)}</td><td class="n">${fm(s.liya)}</td><td class="n">${fm(s.net)}</td></tr></tfoot></table>`;
+    return `<table class="cards"><thead><tr><th>Product</th><th class="n">Entries</th><th class="n">Udhar Diya</th><th class="n">Udhar Liya</th><th class="n">Net</th></tr></thead><tbody>
+    ${Object.values(g).sort((a,b)=>a.n.localeCompare(b.n)).map(x=>{const y=sum(x.l);return `<tr><td data-l="Product"><b>${esc(x.n)}</b></td><td class="n" data-l="Entries">${x.l.length}</td><td class="n" data-l="Udhar Diya">${fm(y.diya)}</td><td class="n" data-l="Udhar Liya">${fm(y.liya)}</td><td class="n" data-l="Net">${fm(y.net)}</td></tr>`}).join('')}</tbody>
+    <tfoot><tr><td>All</td><td class="n" data-l="Entries">${l.length}</td><td class="n" data-l="Udhar Diya">${fm(s.diya)}</td><td class="n" data-l="Udhar Liya">${fm(s.liya)}</td><td class="n" data-l="Net">${fm(s.net)}</td></tr></tfoot></table>`;
   }
-  return `<table><thead><tr><th>Date</th><th>Time</th><th>Type</th><th>Product</th><th class="n">Amount</th><th>Note</th></tr></thead><tbody>
-  ${l.map(t=>`<tr><td>${t.transaction_date}</td><td>${t.transaction_time}</td><td>${tag(t)}</td><td>${pn(t)}</td><td class="n">${fm(amt(t))}</td><td>${esc(t.note)}</td></tr>`).join('')}</tbody>
+  return `<table class="cards"><thead><tr><th>Date</th><th>Time</th><th>Type</th><th>Product</th><th class="n">Amount</th><th>Note</th></tr></thead><tbody>
+  ${l.map(t=>`<tr><td data-l="Date">${t.transaction_date}</td><td data-l="Time">${t.transaction_time}</td><td data-l="Type">${tag(t)}</td><td data-l="Product">${pn(t)}</td><td class="n" data-l="Amount">${fm(amt(t))}</td><td data-l="Note">${esc(t.note)}</td></tr>`).join('')}</tbody>
   <tfoot><tr><td colspan="4">${l.length} entries | Udhar Diya ${fm(s.diya)} | Udhar Liya ${fm(s.liya)}</td><td class="n">Net ${fm(s.net)}</td><td></td></tr></tfoot></table>`;
 }
 
